@@ -1,32 +1,36 @@
-# import os
-import collections
+import csv
+import os
+import termcolor
 
-x = 'lesson_package/talk'
-y = '__pycache__'
+first_contact = termcolor.colored('#' * 50 + '\n\nこんにちは！私はRobokoです。あなたの名前はなんですか？\n\n' + '#' * 50, 'green')
 
-z = ['/abc', '/def', 'ghi']
+print(first_contact)
+name = input().title()
 
-p = [test.replace('/', '') for test in z]
+if os.path.exists('ranking.csv'):
+    with open('ranking.csv', 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            other_contact = termcolor.colored('#' * 50 + '\n\n私のオススメのレストランは{}です。\n\nこのレストランは好きですか？ [Yes/No]\n\n'.format(row['Name']) + '#' * 50, 'green')
+            print(other_contact)
+            answer = input()
+            if answer.lower() == 'y' or answer.lower() == 'yes':
+                break
+else:
+    with open('ranking.csv', 'w') as csv_file:
+        fieldnames = ['Name', 'Count']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
 
-num = [1, 2, 3, 4, 5]
+second_contact = termcolor.colored('#' * 50 + '\n\n{}さん。どこのレストランが好きですか？\n\n'.format(name) + '#' * 50, 'green')
 
-h = collections.defaultdict(str)
+print(second_contact)
+restaurant = input().title()
 
-for key in z:
-    h[key] += '2'
+last_contact = termcolor.colored('#' * 50 + '\n\n{}さん。ありがとうございました。\n\n良い一日を！さようなら。\n\n'.format(name) + '#' * 50, 'green')
+print(last_contact)
 
-print(h)
-
-# print(os.path.join(*p))
-
-# for name, count in h.items():
-#     print(name, count)
-
-
-# def t():
-#     for i in range(10):
-#         yield i
-
-
-# for i in t():
-#     print(i)
+if os.path.exists('ranking.csv'):
+    with open('ranking.csv', 'a') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(['{}'.format(restaurant), 1])
